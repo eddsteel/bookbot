@@ -1,7 +1,7 @@
 name:                bookbot
 version:             0.1.0.0
 github:              "eddsteel/bookbot"
-license:             BSD3
+license:             GPL-3
 author:              "Edward Steel"
 maintainer:          "edward.steel@gmail.com"
 copyright:           "GPL"
@@ -21,11 +21,24 @@ description:         Please see the README on GitHub at <https://github.com/edds
 
 dependencies:
 - base >= 4.7 && < 5
+- HandsomeSoup
+- hxt
 
 library:
   source-dirs: src
 
 executables:
+  scratch:
+    main:                Scratch.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -main-is Scratch
+    dependencies:
+    - bookbot
+
   bookbot-exe:
     main:                Main.hs
     source-dirs:         app
