@@ -1,6 +1,10 @@
 module Main where
 
-import Lib
+import BookBot
 
 main :: IO ()
-main = someFunc
+main = do
+  (config, rng) <- initBB
+  highlight <- randomHighlight "resources/single-book-request.html" rng
+  res <- postHighlight config highlight
+  print res

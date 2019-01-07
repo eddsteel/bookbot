@@ -1,8 +1,29 @@
 module BookBot.Data where
 
-data Highlight = HL {book :: String, author :: String, quote :: String}
+import Data.Monoid
+
+data Highlight = HL { book :: String, author :: String, quote :: String }
                deriving (Show, Eq)
 
-wc           :: Highlight -> Int
-wc (HL b a q) = length b + length a + length q
+hlText :: Highlight -> [String]
+hlText hl = [f hl | f <- [book, author, quote]]
 
+hlRender :: Highlight -> String
+hlRender hl = concat ["“", quote hl, "”\n\n", book hl, " — ", author hl]
+
+data Config = Config {
+              consumerKey :: String,
+              consumerSecret :: String,
+              accessToken :: String,
+              accessSecret :: String
+              }
+
+wc :: Highlight -> Int
+wc = getSum . foldMap (Sum . length) . hlText
+
+createConfig :: Applicative f => (String -> f String) -> f Config
+createConfig get = Config <$>
+  get "OAUTH_CONSUMER_KEY" <*>
+  get "OAUTH_CONSUMER_SECRET" <*>
+  get "OAUTH_ACCESS_TOKEN" <*>
+  get "OAUTH_ACCESS_SECRET"

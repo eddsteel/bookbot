@@ -27,6 +27,8 @@ dependencies:
 - authenticate-oauth
 - bytestring
 - text
+- twitter-types
+- random
 
 library:
   source-dirs: src
@@ -54,7 +56,7 @@ executables:
     dependencies:
     - bookbot
 
-  bookbot-exe:
+  bookbot-post:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
