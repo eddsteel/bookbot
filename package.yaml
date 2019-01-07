@@ -23,11 +23,26 @@ dependencies:
 - base >= 4.7 && < 5
 - HandsomeSoup
 - hxt
+- twitter-conduit
+- authenticate-oauth
+- bytestring
+- text
 
 library:
   source-dirs: src
 
 executables:
+  bookbot-auth:
+    main:                Auth.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -main-is Auth
+    dependencies:
+    - bookbot
+
   scratch:
     main:                Scratch.hs
     source-dirs:         app
