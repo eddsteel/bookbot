@@ -5,6 +5,6 @@ import BookBot
 main :: IO ()
 main = do
   (config, rng) <- initBB
-  highlight <- randomHighlight "resources/single-book-request.html" rng
+  highlight <- randomHighlight "books/B01BX7S1M2.xml" rng
   res <- postHighlight config highlight
   print res
