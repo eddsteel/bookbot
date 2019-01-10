@@ -17,5 +17,5 @@ import System.Random
 main :: IO ()
 main = do
   rng <- getStdGen
-  highlight <- randomHighlight "resources/single-book-request.html" rng
+  highlight <- randomHighlight "books/B01BX7S1M2.xml" rng
   putStrLn . hlRender $ highlight

@@ -1,3 +1,5 @@
+books
+tmp
 .env
 .stack-work/
 bookbot.cabal
