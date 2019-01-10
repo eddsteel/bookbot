@@ -9,8 +9,8 @@ import System.Random
 randomHighlight :: RandomGen g => String -> g -> IO Highlight
 randomHighlight href rng = do
   all <- allHighlights href
-  let (i, _) = randomR (0, length all) rng
-  return $ all !! i
+  let (i, _) = randomR (1, length all) rng
+  return $ all !! (i - 1)
 
 allHighlights :: String -> IO [Highlight]
 allHighlights href = do
