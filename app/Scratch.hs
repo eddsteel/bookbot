@@ -6,6 +6,14 @@ import BookBot.Twitter
 import BookBot.Soup
 import System.Environment
 import System.Random
+import System.Directory
+
+randomBook :: (RandomGen) rng => rng -> FilePath -> IO FilePath
+randomBook rng dir = do
+  books <- listDirectory dir
+  let (index, _) = randomR (0, length books) rng
+  return $ concat [dir, "/", books !! index]
+
 
 --post :: IO ()
 --post = do
@@ -17,5 +25,6 @@ import System.Random
 main :: IO ()
 main = do
   rng <- getStdGen
-  highlight <- randomHighlight "books/B01BX7S1M2.xml" rng
+  file <- randomBook rng "books"
+  highlight <- randomHighlight file rng
   putStrLn . hlRender $ highlight

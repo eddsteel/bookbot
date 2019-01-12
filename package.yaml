@@ -29,6 +29,7 @@ dependencies:
 - text
 - twitter-types
 - random
+- directory
 
 library:
   source-dirs: src

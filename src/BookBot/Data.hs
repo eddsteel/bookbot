@@ -15,15 +15,17 @@ data Config = Config {
               consumerKey :: String,
               consumerSecret :: String,
               accessToken :: String,
-              accessSecret :: String
+              accessSecret :: String,
+              bookDirectory :: FilePath
               }
 
 wc :: Highlight -> Int
-wc = getSum . foldMap (Sum . length) . hlText
+wc = length . hlRender
 
 createConfig :: Applicative f => (String -> f String) -> f Config
 createConfig get = Config <$>
   get "OAUTH_CONSUMER_KEY" <*>
   get "OAUTH_CONSUMER_SECRET" <*>
   get "OAUTH_ACCESS_TOKEN" <*>
-  get "OAUTH_ACCESS_SECRET"
+  get "OAUTH_ACCESS_SECRET" <*>
+  get "BOOK_DIRECTORY"
