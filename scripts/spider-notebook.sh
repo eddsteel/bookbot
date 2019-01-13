@@ -27,3 +27,8 @@ done
 
 # delete empty books
 find $BOOK_DIRECTORY -type f -size -20b -delete
+
+if [[ -n ${S3_BUCKET} ]]; then
+    ls -1 $BOOK_DIRECTORY | grep -E '.*.xml$' > $BOOK_DIRECTORY/index.txt
+    s3cmd sync $BOOK_DIRECTORY s3://$S3_BUCKET/bookbot/
+fi

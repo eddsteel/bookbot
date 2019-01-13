@@ -20,16 +20,18 @@ extra-source-files:
 description:         Please see the README on GitHub at <https://github.com/eddsteel/bookbot#readme>
 
 dependencies:
-- base >= 4.7 && < 5
-- HandsomeSoup
-- hxt
-- twitter-conduit
 - authenticate-oauth
+- base >= 4.7 && < 5
 - bytestring
-- text
-- twitter-types
-- random
 - directory
+- filepath
+- HandsomeSoup
+- http-conduit
+- hxt
+- random
+- text
+- twitter-conduit
+- twitter-types
 
 library:
   source-dirs: src

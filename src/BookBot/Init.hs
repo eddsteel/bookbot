@@ -6,4 +6,4 @@ import System.Environment
 import System.Random
 
 initBB :: IO (Config, StdGen)
-initBB = (,) <$> createConfig getEnv <*> getStdGen
+initBB = (,) <$> createConfig getEnv lookupEnv <*> getStdGen

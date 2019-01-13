@@ -1,11 +1,11 @@
-module BookBot.IO(randomBook) where
+module BookBot.IO(bookUrlLocal, listBooksLocal) where
 import System.Random
 import System.Directory
+import System.FilePath
+import BookBot.Data
 
-randomBook :: (RandomGen g) => g -> FilePath -> IO FilePath
-randomBook rng dir = do
-  books <- listDirectory dir
-  let (index, _) = randomR (0, length books - 1) rng
-  return $ concat [dir, "/", books !! index]
+listBooksLocal :: Config -> IO [String]
+listBooksLocal = listDirectory . bookDirectory
 
-       
+bookUrlLocal :: Config -> String -> String
+bookUrlLocal config book = bookDirectory config </> book
