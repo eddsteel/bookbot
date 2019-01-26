@@ -59,7 +59,7 @@ executables:
     dependencies:
     - bookbot
 
-  bookbot-post:
+  post:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
