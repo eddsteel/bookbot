@@ -1,12 +1,19 @@
 module BookBot.Data where
 
 import Data.Monoid
+import Text.Regex
 
 data Source = S3 | Local -- | AmazonNotebook ?
             deriving (Show, Eq)
 
 data Highlight = HL { book :: String, author :: String, quote :: String }
                deriving (Show, Eq)
+
+clean :: Highlight -> Highlight
+clean (HL book author quote) = HL book' author' quote'
+  where book' = subRegex (mkRegex " \\([^)]*\\)$") book ""
+        author' = author
+        quote' = subRegex (mkRegex "[”]$") quote ""
 
 hlText :: Highlight -> [String]
 hlText hl = [f hl | f <- [book, author, quote]]

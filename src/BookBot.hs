@@ -28,5 +28,5 @@ pickHighlight config rng = do
   let src = source config
   books <- listBooks src config
   let url = bookUrl src config $ randomElement rng books
-  randomHighlight url rng
+  fmap clean $ randomHighlight url rng
 
