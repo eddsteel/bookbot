@@ -15,8 +15,8 @@ tag:
 	docker tag $(DOCKER_IMG):latest $(DOCKER_REPO)/$(DOCKER_REPO_IMG):$(VERSION)
 
 push:
-	docker push $(DOCKER_REPO)/eddsteel/bookbot:latest
-	docker push $(DOCKER_REPO)/eddsteel/bookbot:$(VERSION)
+	docker push $(DOCKER_REPO)/$(DOCKER_REPO_IMG):latest
+	docker push $(DOCKER_REPO)/$(DOCKER_REPO_IMG):$(VERSION)
 
 run:
 	docker run \
