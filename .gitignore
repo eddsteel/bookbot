@@ -1,5 +1,6 @@
 books
 tmp
-.env
+dist
+.envrc
 .stack-work/
 bookbot.cabal
