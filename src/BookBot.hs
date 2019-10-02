@@ -26,7 +26,7 @@ bookUrl Local = bookUrlLocal
 pickHighlight :: RandomGen g => Config -> g -> IO Highlight
 pickHighlight config rng = do
   let src = source config
-  books <- listBooks src config
+  listing <- listBooks src config
+  let books = weighted listing
   let url = bookUrl src config $ randomElement rng books
   fmap clean $ randomHighlight url rng
-

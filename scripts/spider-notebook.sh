@@ -33,8 +33,10 @@ done
 # delete empty books
 find $BOOK_DIRECTORY -type f -size -20b -delete
 
+# generate listing: file:n
+grep -c "a-row kp-notebook-highlight kp-notebook-selectable kp-notebook-highlight-yellow" $BOOK_DIRECTORY/*.xml | sed -e "s/$BOOK_DIRECTORY\///" > $BOOK_DIRECTORY/index.txt
+
 if [[ -n ${S3_BUCKET} ]]; then
-    ls -1 $BOOK_DIRECTORY | grep -E '.*.xml$' > $BOOK_DIRECTORY/index.txt
     s3cmd sync --delete-removed --content-type 'text/xml; charset=utf-8' \
           $BOOK_DIRECTORY s3://$S3_BUCKET/bookbot/
 fi

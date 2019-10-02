@@ -5,7 +5,9 @@ import System.FilePath
 import BookBot.Data
 
 listBooksLocal :: Config -> IO [String]
-listBooksLocal = listDirectory . bookDirectory
+listBooksLocal config =
+  let index = bookDirectory config </> "index.txt" in
+  fmap lines $ readFile index
 
 bookUrlLocal :: Config -> String -> String
 bookUrlLocal config book = bookDirectory config </> book

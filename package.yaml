@@ -33,6 +33,7 @@ dependencies:
 - text
 - twitter-conduit
 - twitter-types
+- split
 
 library:
   source-dirs: src
