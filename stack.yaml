@@ -63,23 +63,3 @@ extra-deps:
 #
 # Allow a newer minor version of GHC than the snapshot specifies
 # compiler-check: newer-minor
-docker:
-  enable: true
-  stack-exe: download
-  env:
-    - OAUTH_CONSUMER_KEY
-    - OAUTH_CONSUMER_SECRET
-    - OAUTH_ACCESS_TOKEN
-    - OAUTH_ACCESS_SECRET
-    - BOOK_DIRECTORY
-    - S3_BUCKET
-    - S3_URL
-    - COOKIE
-    - AMZNDEVTYPE
-image:
-  containers:
-    - base: "fpco/ubuntu-with-libgmp:14.04"
-      name: "eddsteel/bookbot"
-      entrypoints:
-        - post
-        - scratch
