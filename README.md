@@ -1,6 +1,7 @@
 # bookbot
 
-Instructions below, and scripts,  assume env vars are stored in a file called `.env`.
+Instructions below, and scripts, assume env vars are stored in a file
+called `.envrc`. You can use `direnv` to transparently load them.
 
 ## Twitter setup
 

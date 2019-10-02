@@ -23,7 +23,7 @@ bookUrl :: Source -> Config -> String -> String
 bookUrl S3 = bookUrlS3
 bookUrl Local = bookUrlLocal
 
-pickHighlight :: (RandomGen g) => Config -> g -> IO Highlight
+pickHighlight :: RandomGen g => Config -> g -> IO Highlight
 pickHighlight config rng = do
   let src = source config
   books <- listBooks src config
