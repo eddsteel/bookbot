@@ -20,7 +20,7 @@ This is currently manual, and requires `wget` and `xmllint`.
   current session cookies (store as `COOKIE`) and the value used in
   `amazonDeviceType` parameters (store as `AMZNDEVTYPE`)
 - Set `BOOK_DIRECTORY` to configure where book highlights are downloaded to.
-- If you specify an `S3_BUCKET` variable, the scraper will upload to it, using `s3cmd`.
+- If you specify an `S3_BUCKET` variable, the scraper will upload to it, using `aws s3`.
 - run `scripts/spider-notebook.sh`
 
 
@@ -39,3 +39,12 @@ With the above setup, run `bookbot-post` to choose a random book, and
 a random quote from it, and post it to twitter. If `S3_BUCKET` is set,
 the book will be retrieved from S3, otherwise the local
 `BOOK_DIRECTORY` will be used.
+
+## Docker
+
+The included Dockerfile specifies a container that runs
+`bookbot-post`. You can run `make image` to buid it. You can run `make
+deploy` to both build it and push to your ECR repository (using `aws
+ecr`). You can then deploy that with appropriate environment for adhoc
+fargate tasks or on a schedule. This is how
+[@eddbookbot](https://twitter.com/eddbookbot) runs.
