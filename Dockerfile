@@ -1,13 +1,33 @@
+# Thanks https://medium.com/permutive/optimized-docker-builds-for-haskell-76a9808eb10b
+
+FROM fpco/stack-build:lts-10.10 as dependencies
+RUN mkdir /opt/build
+WORKDIR /opt/build
+RUN apt-get update && apt-get download libgmp10 # so we can share it
+RUN mv libgmp*.deb libgmp.deb
+COPY stack.yaml package.yaml stack.yaml.lock /opt/build/ # don't cache if these change
+
+RUN stack build --system-ghc --dependencies-only
+
+#---
+
 FROM fpco/stack-build:lts-10.10 as build
 RUN mkdir /opt/build
+COPY --from=dependencies /root/.stack /root/.stack
 COPY . /opt/build
-RUN cd /opt/build && stack build --system-ghc
+
+WORKDIR /opt/build
+RUN stack build --system-ghc
+RUN mv "$(stack path --local-install-root --system-ghc)/bin" /opt/build/bin
+
+#---
+
 FROM ubuntu:18.10
-RUN mkdir -p /opt/bookbot
+RUN mkdir /opt/bookbot
 WORKDIR /opt/bookbot
-RUN apt-get update && apt-get install -y \
-  ca-certificates \
-  libgmp-dev \
-  netbase
-COPY --from=build /opt/build/.stack-work/install/x86_64-linux/lts-10.10/8.2.2/bin/ .
+RUN apt-get update && apt-get install -y ca-certificates netbase
+COPY --from=dependencies /opt/build/libgmp.deb /tmp
+RUN dpkg -i /tmp/libgmp.deb && rm /tmp/libgmp.deb
+
+COPY --from=build /opt/build/bin/ .
 CMD ["/opt/bookbot/post"]

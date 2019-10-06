@@ -7,16 +7,20 @@ login:
 	$$(aws ecr get-login --no-include-email)
 
 image:
-	docker build --tag $(DOCKER_IMG):latest .
+	docker pull $(DOCKER_REPO)/$(DOCKER_REPO_IMG)-dep:latest || true
+	docker build --target dependencies --cache-from $(DOCKER_IMG)-dep:latest --tag $(DOCKER_IMG)-dep .
+	docker build --target app --cache-from $(DOCKER_IMG)-dep:latest --tag $(DOCKER_IMG) .
 	docker tag $(DOCKER_IMG):latest $(DOCKER_IMG):$(VERSION)
 
 tag:
 	docker tag $(DOCKER_IMG):latest $(DOCKER_REPO)/$(DOCKER_REPO_IMG):latest
+	docker tag $(DOCKER_IMG)-dep:latest $(DOCKER_REPO)/$(DOCKER_REPO_IMG)-dep:latest
 	docker tag $(DOCKER_IMG):latest $(DOCKER_REPO)/$(DOCKER_REPO_IMG):$(VERSION)
 
 push:
 	docker push $(DOCKER_REPO)/$(DOCKER_REPO_IMG):latest
 	docker push $(DOCKER_REPO)/$(DOCKER_REPO_IMG):$(VERSION)
+	docker push $(DOCKER_REPO)/$(DOCKER_REPO_IMG)-dep:latest
 
 run:
 	docker run \
