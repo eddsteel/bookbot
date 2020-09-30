@@ -7,11 +7,8 @@ import System.IO.Unsafe
 main :: IO ()
 main = do
   (config, rng) <- initBB
-  let rans = take 5 $ rngs rng
-  highlights <- traverse (pickHighlight config) rans
-  let highlight = head $ dropWhile tooLong highlights
-  res <- postHighlight config highlight
-  print res
-  where
-    tooLong hl = wc hl >= 280
-    rngs = iterate (snd . next)
+  highlight <- pickHighlight config rng
+  res <- if wc highlight >= 280
+        then postImg config highlight
+        else postHighlight config highlight
+  return ()

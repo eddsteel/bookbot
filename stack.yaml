@@ -39,6 +39,9 @@ packages:
 # using the same syntax as the packages field.
 # (e.g., acme-missiles-0.3)
 extra-deps:
+- svgcairo-0.13.1.1
+- glib-0.13.8.0
+- simple-download-0.0.2
 
 # Override default flag values for local packages and extra-deps
 # flags: {}

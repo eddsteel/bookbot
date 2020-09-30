@@ -23,6 +23,9 @@ This is currently manual, and requires `wget` and `xmllint`.
 - If you specify an `S3_BUCKET` variable, the scraper will upload to it, using `aws s3`.
 - run `scripts/spider-notebook.sh`
 
+## Add quotes manually
+
+You can add manual quotes to `.yaml` files (one per book), see [./manual/black-jacobins.yaml](black-jacobins.yaml) for the format. You should set `$MANUAL_DIRECTORY` to the directory containing these yaml files.
 
 ## S3
 

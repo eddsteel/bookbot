@@ -8,7 +8,6 @@ copyright:           "GPL"
 
 extra-source-files:
 - README.md
-- ChangeLog.md
 
 # Metadata used when publishing your package
 # synopsis:            Short description of your package
@@ -20,20 +19,33 @@ extra-source-files:
 description:         Please see the README on GitHub at <https://github.com/eddsteel/bookbot#readme>
 
 dependencies:
+- aeson
 - authenticate-oauth
 - base >= 4.7 && < 5
 - bytestring
+- cairo
+- diagrams-core
+- diagrams-lib
+- diagrams-svg
 - directory
 - filepath
 - HandsomeSoup
 - http-conduit
 - hxt
+- JuicyPixels
+- pooled-io
 - random
+- rasterific-svg
 - regex-compat
+- simple-download
+- svgcairo
+- svg-builder
 - text
 - twitter-conduit
 - twitter-types
 - split
+- modern-uri
+- yaml
 
 library:
   source-dirs: src

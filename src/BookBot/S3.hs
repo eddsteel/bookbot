@@ -1,18 +1,25 @@
-module BookBot.S3(bookUrlS3, listBooksS3) where
+module BookBot.S3(bookUrlS3, listBooksS3, listManualBooksS3) where
 
 import BookBot.Data
 import Data.Maybe (fromJust)
 import Network.HTTP.Simple
 import qualified Data.ByteString.Lazy.Char8 as S8
 
-listBooksS3 :: Config -> IO [String]
-listBooksS3 config = do
-  let url = bookUrlS3 config "index.txt"
-  request <- parseRequest url
-  response <- httpLBS request
-  let body = getResponseBody response
-  return . lines . S8.unpack $ body
+getListingS3 :: String -> IO [String]
+getListingS3 url = do
+    request <- parseRequest url
+    response <- httpLBS request
+    let body = getResponseBody response
+    return . lines . S8.unpack $ body
 
+listBooksS3 :: Config -> IO [String]
+listBooksS3 config =
+  getListingS3 $ bookUrlS3 config "index.txt"
+
+listManualBooksS3 :: Config -> IO [String]
+listManualBooksS3 config =
+  getListingS3 $ bookUrlS3 config "manual/index.txt"
+  
 bookUrlS3 :: Config -> String -> String
 bookUrlS3 config book = fromJust (s3Url config) ++ "/bookbot/" ++ bookDirectory config ++ "/" ++ book
 

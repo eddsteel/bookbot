@@ -3,7 +3,28 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages: []
+packages:
+- completed:
+    hackage: svgcairo-0.13.1.1@sha256:145b6acce7306e84652376efb3f00e9194ccd8787a62d3f93fb539c4a3382a2e,1686
+    pantry-tree:
+      size: 441
+      sha256: 22491686bb478399f48138dfc400f4a68fb37c2d5c4d7592790ed82b95ed5122
+  original:
+    hackage: svgcairo-0.13.1.1
+- completed:
+    hackage: glib-0.13.8.0@sha256:97698bd054bad38756f3ef0220d7684f72e42660d261e9b118aa73419ce9207d,3136
+    pantry-tree:
+      size: 1625
+      sha256: 1a9d5731f5a7e40da0e5a25e25fea9da259c720e8c0263da1c4836488b60b4c1
+  original:
+    hackage: glib-0.13.8.0
+- completed:
+    hackage: simple-download-0.0.2@sha256:fd8f1a7514f2e2b3a711aa071c4d32781476ad0cf05a9c5b1e28630d774640f5,1070
+    pantry-tree:
+      size: 290
+      sha256: 20883afc0b6514683f95fd6c723736a5d7d9129c4e6841dd13203ce4c91b5800
+  original:
+    hackage: simple-download-0.0.2
 snapshots:
 - completed:
     size: 569901

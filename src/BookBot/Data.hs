@@ -1,25 +1,47 @@
+{-# LANGUAGE TemplateHaskell #-}
 module BookBot.Data where
 
+import Data.Aeson
+import Data.Aeson.TH
+import Data.List(isSuffixOf, isPrefixOf, concat, intercalate)
+import Data.List.Split
 import Data.Monoid
 import Text.Regex
 
 data Source = S3 | Local -- | AmazonNotebook ?
             deriving (Show, Eq)
 
-data Highlight = HL { book :: String, author :: String, quote :: String }
-               deriving (Show, Eq)
+data Highlight = HL {
+    book :: String, hlAuthor :: String, quote :: String
+  } deriving (Show, Eq)
+
+data BookType = Kindle | Manual
+              deriving (Show, Eq)
+
+data ManualBook = MB { title :: String, author :: String, quotes :: [String] }
+                deriving (Show, Eq)
+
+deriveJSON defaultOptions ''ManualBook
 
 clean :: Highlight -> Highlight
 clean (HL book author quote) = HL book' author' quote'
   where book' = subRegex (mkRegex " \\([^)]*\\)$") book ""
-        author' = author
-        quote' = subRegex (mkRegex "[”]$") quote ""
+        author' = subRegex (mkRegex ",.*$") author ""
+        quote' = subRegex (mkRegex "[”]$")
+           (subRegex (mkRegex ".[0-9]+") quote "") ""
 
 hlText :: Highlight -> [String]
-hlText hl = [f hl | f <- [book, author, quote]]
+hlText hl = [f hl | f <- [book, hlAuthor, quote]]
+
+hlRenderLines :: Highlight -> [String]
+hlRenderLines hl = lines ++ [footer]
+  where
+    lines :: [String]
+    lines = fmap (intercalate " ") . chunksOf 9 . words . concat $ ["“", quote hl, "”"]
+    footer =  concat [book hl, " — ", hlAuthor hl]
 
 hlRender :: Highlight -> String
-hlRender hl = concat ["“", quote hl, "”\n\n", book hl, " — ", author hl]
+hlRender hl = concat ["“", quote hl, "”\n\n", book hl, " — ", hlAuthor hl]
 
 data Config = Config {
               consumerKey :: String,
@@ -38,6 +60,11 @@ source c = case (s3Bucket c) of
 
 wc :: Highlight -> Int
 wc = length . hlRender
+
+bookType :: String -> BookType
+bookType url
+  | "manual/" `isPrefixOf` url && ".yaml" `isSuffixOf` url = Manual
+  | otherwise = Kindle
 
 createConfig :: Applicative f => (String -> f String) -> (String -> f (Maybe String)) -> f Config
 createConfig get getM = Config <$>
