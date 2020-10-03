@@ -1,6 +1,8 @@
-books
+/.env
+/.envrc
+/fonty-texture-cache
+.stack-work
+/bookbot.cabal
+/books
+/dist
 tmp
-dist
-.envrc
-.stack-work/
-bookbot.cabal
