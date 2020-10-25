@@ -21,11 +21,16 @@ RUN mv "$(stack path --local-install-root --system-ghc)/bin" /opt/build/bin
 
 #---
 
-FROM ubuntu:20.04 as app
+FROM archlinux:20200908 as app
 RUN mkdir /opt/bookbot
 WORKDIR /opt/bookbot
-RUN apt-get update && apt-get install -y ca-certificates netbase librsvg2-common
-COPY --from=dependencies /opt/build/libgmp.deb /tmp
-RUN dpkg -i /tmp/libgmp.deb && rm /tmp/libgmp.deb
+RUN pacman -Sy fontconfig cairo librsvg --noconfirm
+#RUN apt-get update && apt-get install -y ca-certificates netbase librsvg2-common
+#COPY --from=dependencies /opt/build/libgmp.deb /tmp
+#RUN dpkg -i /tmp/libgmp.deb && rm /tmp/libgmp.deb
 COPY --from=build /opt/build/bin/ .
+RUN mkdir -p /root/.fonts
+COPY fonts/CrimsonText-Regular.ttf /root/.fonts
+COPY fonts/CrimsonText-Bold.ttf /root/.fonts
+RUN fc-cache -f
 CMD ["/opt/bookbot/post"]

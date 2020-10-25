@@ -40,9 +40,9 @@ saveImg d p = do
       surfaceWriteToPNG surface p
 
 render :: Highlight -> Dia
-render hl = font "Apple Garamond" $ dia <> strutX 920
+render hl = font "Crimson Text" $ dia <> strutX 920
   where
-    ls = 36
+    ls = 28
     lines = hlRenderLines hl
     sized = fontSize (local ls)
     quote = (\t -> text t # sized <> strutY ls) <$> init lines
