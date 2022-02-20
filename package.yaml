@@ -1,27 +1,22 @@
 name:                bookbot
-version:             0.1.0.0
+version:             0.1.0.1
 github:              "eddsteel/bookbot"
 license:             GPL-3
 author:              "Edward Steel"
-maintainer:          "edward.steel@gmail.com"
+maintainer:          "edd@eddsteel.com"
 copyright:           "GPL"
 
 extra-source-files:
 - README.md
 
-# Metadata used when publishing your package
-# synopsis:            Short description of your package
-# category:            Web
-
-# To avoid duplicated efforts in documentation and dealing with the
-# complications of embedding Haddock markup inside cabal files, it is
-# common to point users to the README.md file.
 description:         Please see the README on GitHub at <https://github.com/eddsteel/bookbot#readme>
 
 dependencies:
+- base == 4.*
+- HandsomeSoup
+- JuicyPixels
 - aeson
 - authenticate-oauth
-- base >= 4.7 && < 5
 - bytestring
 - cairo
 - diagrams-core
@@ -29,22 +24,19 @@ dependencies:
 - diagrams-svg
 - directory
 - filepath
-- HandsomeSoup
 - http-conduit
 - hxt
-- JuicyPixels
+- modern-uri
 - pooled-io
 - random
 - rasterific-svg
 - regex-compat
-- simple-download
-- svgcairo
+- split
 - svg-builder
+- svgcairo
 - text
 - twitter-conduit
 - twitter-types
-- split
-- modern-uri
 - yaml
 
 library:
@@ -80,6 +72,8 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    - -Wall
+    - -Werror
     dependencies:
     - bookbot
 

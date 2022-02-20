@@ -8,7 +8,7 @@ import Data.List.Split
 import Data.Monoid
 import Text.Regex
 
-data Source = S3 | Local -- | AmazonNotebook ?
+data Source = S3 | Local
             deriving (Show, Eq)
 
 data Highlight = HL {
@@ -33,12 +33,12 @@ clean (HL book author quote) = HL book' author' quote'
 hlText :: Highlight -> [String]
 hlText hl = [f hl | f <- [book, hlAuthor, quote]]
 
-hlRenderLines :: Highlight -> [String]
-hlRenderLines hl = lines ++ [footer]
+hlRenderLines :: Highlight -> ([String], [String])
+hlRenderLines hl = (lines, footer)
   where
-    lines :: [String]
-    lines = fmap (intercalate " ") . chunksOf 9 . words . concat $ ["“", quote hl, "”"]
-    footer =  concat [book hl, " — ", hlAuthor hl]
+    wrap l = fmap (intercalate " ") . chunksOf l . words . concat
+    lines  = wrap 9 ["“", quote hl, "”"]
+    footer = wrap 7 [book hl, " — ", hlAuthor hl]
 
 hlRender :: Highlight -> String
 hlRender hl = concat ["“", quote hl, "”\n\n", book hl, " — ", hlAuthor hl]

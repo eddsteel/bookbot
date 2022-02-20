@@ -5,7 +5,7 @@ import Data.Maybe (fromMaybe)
 import System.Environment
 import System.IO (hFlush, stdout)
 import Web.Authenticate.OAuth as OA
-import Web.Twitter.Conduit hiding (lookup)
+import Web.Twitter.Conduit
 import qualified Data.ByteString.Char8 as S8
 
 dumpCreds :: OAuth -> Credential -> IO ()

@@ -12,7 +12,6 @@ import Text.XML.HXT.DOM.ShowXml
 import Web.Authenticate.OAuth as OA
 import Web.Twitter.Conduit
 import Web.Twitter.Types (Status)
-import Network.HTTP.Client.Conduit.Download (download)
 import qualified Data.ByteString.Char8 as S8
 import qualified Data.Text as T
 
@@ -24,19 +23,22 @@ buildTwInfo config = setCredential oauth cred def
     cred = Credential [("oauth_token", S8.pack $ accessToken config),
                        ("oauth_token_secret", S8.pack $ accessSecret config)]
 
-postHighlight :: Config -> Highlight -> IO Status
-postHighlight config hl = do
-  let twinfo = buildTwInfo config
-  let status = T.pack . hlRender $ hl
+post config req = do
   mgr <- newManager tlsManagerSettings
-  call twinfo mgr $ update status
+  call (buildTwInfo config) mgr req
+
+
+postHighlight :: Config -> Highlight -> IO Status
+postHighlight config hl = post config $ statusesUpdate status
+  where
+    status = T.pack . hlRender $ hl
+
 
 -- creates an image from the given highlight and posts it.
 postImg :: Config -> Highlight -> IO Status
 postImg config hl = do
-  let twinfo = buildTwInfo config
-  saveImg (render hl) "/tmp/bookbot.png"
-  mgr <- newManager tlsManagerSettings
-  call twinfo mgr $ updateWithMedia "A quote." (MediaFromFile "/tmp/bookbot.png")
+  saveImg (render hl) fpath
+  post config $ statusesUpdateWithMedia status (MediaFromFile fpath)
   where
-    src = source config
+    fpath = "/tmp/bookbot.png"
+    status = T.pack . concat $ ["A quote from ", book hl, " by ", hlAuthor hl, "."]

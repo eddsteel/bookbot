@@ -6,16 +6,9 @@ module Scratch where
 
 import BookBot
 
-import BookBot.Data
 import BookBot.Image
-import BookBot.Twitter
-import BookBot.Soup
 import BookBot.YAML
-import Data.List (intersperse)
 import System.Environment
-import System.Random
-import System.Directory
-import Control.Concurrent.PooledIO.Independent
 
 manual :: IO ()
 manual = do
@@ -27,9 +20,9 @@ manual = do
 
 singleimg :: IO ()
 singleimg = do
-  config <- createConfig getEnv lookupEnv
-  highlights <- allHighlightsFromSoup "books/B000FBFNWO.xml"
+  highlights <- allHighlightsFromSoup "./B084JSK89X.xml"  
   let highlight = highlights !! 3
+  putStrLn (show highlight)
   saveImg (render highlight) "out.png" 
 
 main :: IO ()
