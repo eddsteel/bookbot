@@ -15,13 +15,10 @@ data Highlight = HL {
     book :: String, hlAuthor :: String, quote :: String
   } deriving (Show, Eq)
 
-data BookType = Kindle | Manual
-              deriving (Show, Eq)
-
-data ManualBook = MB { title :: String, author :: String, quotes :: [String] }
+data Quotes = Q { title :: String, author :: String, quotes :: [String] }
                 deriving (Show, Eq)
 
-deriveJSON defaultOptions ''ManualBook
+deriveJSON defaultOptions ''Quotes
 
 clean :: Highlight -> Highlight
 clean (HL book author quote) = HL book' author' quote'
@@ -37,8 +34,8 @@ hlRenderLines :: Highlight -> ([String], [String])
 hlRenderLines hl = (lines, footer)
   where
     wrap l = fmap (intercalate " ") . chunksOf l . words . concat
-    lines  = wrap 9 ["“", quote hl, "”"]
-    footer = wrap 7 [book hl, " — ", hlAuthor hl]
+    lines  = wrap 8 ["“", quote hl, "”"]
+    footer = wrap 6 [book hl, " — ", hlAuthor hl]
 
 hlRender :: Highlight -> String
 hlRender hl = concat ["“", quote hl, "”\n\n", book hl, " — ", hlAuthor hl]
@@ -60,11 +57,6 @@ source c = case (s3Bucket c) of
 
 wc :: Highlight -> Int
 wc = length . hlRender
-
-bookType :: String -> BookType
-bookType url
-  | "manual/" `isPrefixOf` url && ".yaml" `isSuffixOf` url = Manual
-  | otherwise = Kindle
 
 createConfig :: Applicative f => (String -> f String) -> (String -> f (Maybe String)) -> f Config
 createConfig get getM = Config <$>

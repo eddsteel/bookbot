@@ -11,21 +11,21 @@ called `.envrc`. You can use `direnv` to transparently load them.
 - Set `OAUTH_ACCESS_TOKEN` and `OAUTH_ACCESS_SECRET` accordingly.
 
 
+## Add quotes manually
+
+The bookbot reads quotes from YAML files. See [./manual/black-jacobins.yaml](black-jacobins.yaml) for the format. You should set `$MANUAL_DIRECTORY` to the directory containing these yaml files.
+
 ## Scrape Amazon notebook
 
-This is currently manual, and requires `wget` and `xmllint`.
+ You can also generate YAML files from your Kindle notebook. This is currently manual, and requires `curl`, `xmllint`, `pup`, `jq`, `json2yaml` (`nix-shell` will give you them).
 
 - Log into [your notebook](https://read.amazon.com/notebook)
 - Use dev tools in the browser, and click on some books, to read your
-  current session cookies (store as `COOKIE`) and the value used in
-  `amazonDeviceType` parameters (store as `AMZNDEVTYPE`)
+  current session cookies (store as `COOKIE`).
 - Set `BOOK_DIRECTORY` to configure where book highlights are downloaded to.
 - If you specify an `S3_BUCKET` variable, the scraper will upload to it, using `aws s3`.
 - run `scripts/spider-notebook.sh`
 
-## Add quotes manually
-
-You can add manual quotes to `.yaml` files (one per book), see [./manual/black-jacobins.yaml](black-jacobins.yaml) for the format. You should set `$MANUAL_DIRECTORY` to the directory containing these yaml files.
 
 ## S3
 

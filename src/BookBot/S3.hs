@@ -1,4 +1,4 @@
-module BookBot.S3(bookUrlS3, listBooksS3, listManualBooksS3) where
+module BookBot.S3(bookUrlS3, listBooksS3) where
 
 import BookBot.Data
 import Data.Maybe (fromJust)
@@ -15,10 +15,6 @@ getListingS3 url = do
 listBooksS3 :: Config -> IO [String]
 listBooksS3 config =
   getListingS3 $ bookUrlS3 config "index.txt"
-
-listManualBooksS3 :: Config -> IO [String]
-listManualBooksS3 config =
-  getListingS3 $ bookUrlS3 config "manual/index.txt"
   
 bookUrlS3 :: Config -> String -> String
 bookUrlS3 config book = fromJust (s3Url config) ++ "/bookbot/" ++ bookDirectory config ++ "/" ++ book

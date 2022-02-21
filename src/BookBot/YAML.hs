@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module BookBot.YAML (allHighlightsFromFile) where
+module BookBot.YAML (allHighlights) where
 import BookBot.Data
 import Network.HTTP.Simple
 import Data.Yaml (decodeEither', ParseException)
@@ -17,10 +17,9 @@ byteStringFrom :: Source -> String -> IO B8.ByteString
 byteStringFrom S3 uri = byteStringFromUri uri
 byteStringFrom Local fp = byteStringFromFile fp
 
-allHighlightsFromFile :: Source -> String -> IO [Highlight]
-allHighlightsFromFile src href = do
+allHighlights :: Source -> String -> IO [Highlight]
+allHighlights src href = do
   bs <- byteStringFrom src href
   let e = decodeEither' bs
-  putStrLn (show e)
   let (Right book) = e -- lol this sucks
   return $ HL (title book) (author book) `map` quotes book

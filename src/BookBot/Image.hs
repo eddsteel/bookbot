@@ -45,6 +45,6 @@ render hl = font "Crimson Text" $ dia <> strutX 920
     ls = 28
     (lines, footer) = hlRenderLines hl
     sized = fontSize (local ls)
-    quote = (\t -> text t # sized <> strutY ls) <$> init lines
+    quote = (\t -> text t # sized <> strutY ls) <$> lines
     foot = extrudeTop 20.0 . vcat $ (\t -> text t # bold . sized <> strutY (1.3 * ls)) <$> footer
     dia = extrudeTop 100.0 $ extrudeBottom 100.0 $ vcat quote === foot

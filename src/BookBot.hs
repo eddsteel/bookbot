@@ -1,7 +1,6 @@
 module BookBot
   ( module BookBot.Data
   , module BookBot.Init
-  , module BookBot.Soup
   , module BookBot.Twitter
   , module BookBot.IO
   , module BookBot.S3
@@ -10,7 +9,6 @@ module BookBot
   ) where
 import BookBot.Data
 import BookBot.Init
-import BookBot.Soup
 import BookBot.YAML
 import BookBot.Twitter
 import BookBot.IO
@@ -26,13 +24,9 @@ bookUrl :: Source -> Config -> String -> String
 bookUrl S3 = bookUrlS3
 bookUrl Local = bookUrlLocal
 
-allHighlights :: Source -> BookType -> String -> IO [Highlight]
-allHighlights _ Kindle = allHighlightsFromSoup
-allHighlights src Manual = allHighlightsFromFile src
-
-randomHighlight :: RandomGen g => Source -> BookType -> String -> g -> IO Highlight
-randomHighlight src bt href rng = do
-  highlights <- allHighlights src bt href
+randomHighlight :: RandomGen g => Source -> String -> g -> IO Highlight
+randomHighlight src href rng = do
+  highlights <- allHighlights src href
   let (i, _) = randomR (0, length highlights - 1) rng
   return $ highlights !! i
 
@@ -43,5 +37,4 @@ pickHighlight config rng = do
   let books = weighted listing
   let book = randomElement rng books
   let url = bookUrl src config book
-  let bt = bookType book
-  fmap clean $ randomHighlight src bt url rng
+  fmap clean $ randomHighlight src url rng

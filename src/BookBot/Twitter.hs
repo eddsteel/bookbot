@@ -6,7 +6,6 @@ import BookBot.Image
 import Data.Maybe (fromMaybe)
 import System.Environment
 import System.IO (hFlush, stdout)
-import Text.HandsomeSoup
 import Text.XML.HXT.Core hiding (xshow)
 import Text.XML.HXT.DOM.ShowXml
 import Web.Authenticate.OAuth as OA
