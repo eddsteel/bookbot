@@ -17,5 +17,5 @@ listBooksS3 config =
   getListingS3 $ bookUrlS3 config "index.txt"
   
 bookUrlS3 :: Config -> String -> String
-bookUrlS3 config book = fromJust (s3Url config) ++ "/bookbot/" ++ bookDirectory config ++ "/" ++ book
+bookUrlS3 config bk = fromJust (s3Url config) ++ "/bookbot/" ++ bookDirectory config ++ "/" ++ bk
 

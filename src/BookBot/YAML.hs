@@ -2,8 +2,7 @@
 module BookBot.YAML (allHighlights) where
 import BookBot.Data
 import Network.HTTP.Simple
-import Data.Yaml (decodeEither', ParseException)
-import qualified Text.URI as URI
+import Data.Yaml (decodeEither')
 import qualified Data.ByteString.Char8 as B8
 
 byteStringFromUri :: String -> IO B8.ByteString
@@ -21,5 +20,5 @@ allHighlights :: Source -> String -> IO [Highlight]
 allHighlights src href = do
   bs <- byteStringFrom src href
   let e = decodeEither' bs
-  let (Right book) = e -- lol this sucks
-  return $ HL (title book) (author book) `map` quotes book
+  let (Right bk) = e -- lol this sucks
+  return $ HL (title bk) (author bk) `map` quotes bk

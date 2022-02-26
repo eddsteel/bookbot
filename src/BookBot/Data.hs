@@ -3,9 +3,9 @@ module BookBot.Data where
 
 import Data.Aeson
 import Data.Aeson.TH
-import Data.List(isSuffixOf, isPrefixOf, concat, intercalate)
+import Data.List(intercalate)
 import Data.List.Split
-import Data.Monoid
+import Data.Monoid ()
 import Text.Regex
 
 data Source = S3 | Local
@@ -21,21 +21,21 @@ data Quotes = Q { title :: String, author :: String, quotes :: [String] }
 deriveJSON defaultOptions ''Quotes
 
 clean :: Highlight -> Highlight
-clean (HL book author quote) = HL book' author' quote'
-  where book' = subRegex (mkRegex " \\([^)]*\\)$") book ""
-        author' = subRegex (mkRegex ",.*$") author ""
+clean (HL bk athr qt) = HL book' author' quote'
+  where book' = subRegex (mkRegex " \\([^)]*\\)$") bk ""
+        author' = subRegex (mkRegex ",.*$") athr ""
         quote' = subRegex (mkRegex "[”]$")
-           (subRegex (mkRegex ".[0-9]+") quote "") ""
+           (subRegex (mkRegex ".[0-9]+") qt "") ""
 
 hlText :: Highlight -> [String]
 hlText hl = [f hl | f <- [book, hlAuthor, quote]]
 
 hlRenderLines :: Highlight -> ([String], [String])
-hlRenderLines hl = (lines, footer)
+hlRenderLines hl = (lns, footer)
   where
     wrap l = fmap (intercalate " ") . chunksOf l . words . concat
-    lines  = wrap 8 ["“", quote hl, "”"]
-    footer = wrap 6 [book hl, " — ", hlAuthor hl]
+    lns    = wrap 8 ["“", quote hl, "”"]
+    footer = wrap 6 [book hl, " — ", hlAuthor hl] -- temporary, need to fix fonts
 
 hlRender :: Highlight -> String
 hlRender hl = concat ["“", quote hl, "”\n\n", book hl, " — ", hlAuthor hl]

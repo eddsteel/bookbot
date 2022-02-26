@@ -35,6 +35,6 @@ pickHighlight config rng = do
   let src = source config
   listing <- listBooks src config
   let books = weighted listing
-  let book = randomElement rng books
-  let url = bookUrl src config book
+  let bk = randomElement rng books
+  let url = bookUrl src config bk
   fmap clean $ randomHighlight src url rng

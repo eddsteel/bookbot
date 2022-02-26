@@ -5,15 +5,15 @@
 module Scratch where
 
 import BookBot
-
 import BookBot.YAML
 import System.Environment
 
 manual :: IO ()
 manual = do
   (config, rng) <- initBB
-  highlight <- pickHighlight config rng
-  putStrLn (show highlight)
+  highlight <- pickHighlight config rng  
+  _ <- postImg config highlight
+  return ()
 
 singlepost :: IO ()
 singlepost = do
@@ -33,4 +33,4 @@ singleimg = do
   putStrLn (show hl)
 
 main :: IO ()
-main = singleimg
+main = manual

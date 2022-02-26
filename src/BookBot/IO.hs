@@ -1,6 +1,5 @@
 module BookBot.IO(bookUrlLocal, listBooksLocal) where
-import System.Random
-import System.Directory
+import System.Directory ()
 import System.FilePath
 import BookBot.Data
 
@@ -10,7 +9,6 @@ listBooksLocal config = do
   contents <- readFile index
   let split = takeWhile (/= ':')
   return $ fmap split (lines contents)
-  
 
 bookUrlLocal :: Config -> String -> String
-bookUrlLocal config book = bookDirectory config </> book
+bookUrlLocal config bk = bookDirectory config </> bk

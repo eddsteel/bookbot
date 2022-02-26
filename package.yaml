@@ -24,11 +24,7 @@ dependencies:
 - directory
 - filepath
 - http-conduit
-- hxt
-- modern-uri
-- pooled-io
 - random
-- rasterific-svg
 - regex-compat
 - split
 - svg-builder
@@ -40,6 +36,10 @@ dependencies:
 
 library:
   source-dirs: src
+  ghc-options:
+  - -Wall
+  - -Werror
+  - -Wunused-packages
 
 executables:
   bookbot-auth:
