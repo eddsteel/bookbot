@@ -8,7 +8,16 @@ import Data.List.Split
 import Data.Monoid ()
 import Text.Regex
 
-data Source = S3 | Local
+-- TODO: actual URL
+data Source = S3 { bucket :: String, url :: String, bookDir :: String } | Local { bookDir :: String }
+            deriving (Show, Eq)
+
+data TwitterCredentials = TC { twConsKey :: String, twConsSecret :: String,
+                        twAccsToken :: String, twAccsSecret :: String } deriving (Show, Eq)
+data ActivityPubCredentials = AC { apToken :: String, apID :: String, apSecret :: String } deriving (Show, Eq)
+data Target = Twitter TwitterCredentials
+            | ActivityPub ActivityPubCredentials
+            | Console
             deriving (Show, Eq)
 
 data Highlight = HL {
@@ -40,30 +49,53 @@ hlRenderLines hl = (lns, footer)
 hlRender :: Highlight -> String
 hlRender hl = concat ["“", quote hl, "”\n\n", book hl, " — ", hlAuthor hl]
 
-data Config = Config {
-              consumerKey :: String,
-              consumerSecret :: String,
-              accessToken :: String,
-              accessSecret :: String,
+data EnvConfig = EnvConfig {
+              twitterConsumerKey :: Maybe String,
+              twitterConsumerSecret :: Maybe String,
+              twitterAccessToken :: Maybe String,
+              twitterAccessSecret :: Maybe String,
               bookDirectory :: FilePath,
               s3Bucket :: Maybe String,
-              s3Url :: Maybe String
-              }
+              s3Url :: Maybe String,
+              aPubAccessToken :: Maybe String,
+              aPubClientID :: Maybe String,
+              aPubClientSecret :: Maybe String
+}
 
-source :: Config -> Source
-source c = case (s3Bucket c) of
-  Just _ -> S3
-  Nothing -> Local
+data Config = Config {
+   source :: Source,
+   target :: Target
+}
+
+config :: EnvConfig -> Config
+config ec = Config (configSource ec) (configTarget ec)
+
+configSource :: EnvConfig -> Source
+configSource c = case sequence [s3Bucket c, s3Url c] of
+  Just [s3b, s3u] -> S3 s3b s3u (bookDirectory c)
+  _ -> Local (bookDirectory c)
+
+configTarget :: EnvConfig -> Target
+configTarget c = case sequence [aPubAccessToken c, aPubClientID c, aPubClientSecret c] of
+    Just [tok, cid, sec] -> ActivityPub (AC tok cid sec)
+    _ -> case sequence [
+      twitterConsumerKey c, twitterConsumerSecret c,
+      twitterAccessToken c, twitterAccessSecret c] of
+      Just [cKey, cSec, aTok, aSec ] -> Twitter (TC cKey cSec aTok aSec)
+      _ -> Console
 
 wc :: Highlight -> Int
 wc = length . hlRender
 
-createConfig :: Applicative f => (String -> f String) -> (String -> f (Maybe String)) -> f Config
-createConfig get getM = Config <$>
-  get "OAUTH_CONSUMER_KEY" <*>
-  get "OAUTH_CONSUMER_SECRET" <*>
-  get "OAUTH_ACCESS_TOKEN" <*>
-  get "OAUTH_ACCESS_SECRET" <*>
+createConfig :: Applicative f => (String -> f String) -> (String -> f (Maybe String)) -> f EnvConfig
+createConfig get getM = EnvConfig <$>
+  getM "OAUTH_CONSUMER_KEY" <*>
+  getM "OAUTH_CONSUMER_SECRET" <*>
+  getM "OAUTH_ACCESS_TOKEN" <*>
+  getM "OAUTH_ACCESS_SECRET" <*>
   get "BOOK_DIRECTORY" <*>
   getM "S3_BUCKET" <*>
-  getM "S3_URL"
+  getM "S3_URL" <*>
+  getM "APUB_ACCESS_TOKEN" <*>
+  getM "APUB_CLIENT_ID" <*>
+  getM "APUB_CLIENT_SECRET"

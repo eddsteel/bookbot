@@ -13,12 +13,10 @@ description:         Please see the README on GitHub at <https://github.com/edds
 
 dependencies:
 - base == 4.*
-- JuicyPixels
 - aeson
 - authenticate-oauth
 - bytestring
 - cairo
-- diagrams-core
 - diagrams-lib
 - diagrams-svg
 - directory

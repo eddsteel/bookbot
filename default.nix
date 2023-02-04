@@ -3,6 +3,7 @@
 let
   hpkgs = pkgs.haskellPackages.override {
     overrides = hself: hsuper: {
+      twitter-types = pkgs.haskell.lib.dontCheck hsuper.twitter-types;
       svgcairo = hsuper.svgcairo.overrideAttrs (attrs: {
         hardeningDisable = ["all"];
       });

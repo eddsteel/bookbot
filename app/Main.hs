@@ -4,9 +4,7 @@ import BookBot
 
 main :: IO ()
 main = do
-  (config, rng) <- initBB
-  highlight <- pickHighlight config rng
-  _ <- if wc highlight >= 280
-       then postImg config highlight
-       else postHighlight config highlight
+  ((Config source target), rng) <- initBB
+  highlight <- pickHighlight source rng
+  _ <- postHighlight target highlight
   return ()

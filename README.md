@@ -3,6 +3,7 @@
 Instructions below, and scripts, assume env vars are stored in a file
 called `.envrc`. You can use `direnv` to transparently load them.
 
+
 ## Twitter setup
 
 - Create an app [in twitter](https://developer.twitter.com/en/apps) to get API Keys.
@@ -14,6 +15,7 @@ called `.envrc`. You can use `direnv` to transparently load them.
 ## Add quotes manually
 
 The bookbot reads quotes from YAML files. See [./manual/black-jacobins.yaml](black-jacobins.yaml) for the format. You should set `$MANUAL_DIRECTORY` to the directory containing these yaml files.
+
 
 ## Scrape Amazon notebook
 
@@ -51,3 +53,11 @@ deploy` to both build it and push to your ECR repository (using `aws
 ecr`). You can then deploy that with appropriate environment for adhoc
 fargate tasks or on a schedule. This is how
 [@eddbookbot](https://twitter.com/eddbookbot) runs.
+
+
+# TODO
+
+- Add ISBN and publish date from https://www.amazon.com/exec/obidos/ASIN/{ASIN}
+- Add date and link to abebooks with ISBN to the tweets.
+  https://www.abebooks.com/servlet/SearchResults?sts=t&kn={ISBN}
+- (outside of this project) push all quotes up to literal.club.
