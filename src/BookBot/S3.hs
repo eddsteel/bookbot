@@ -4,9 +4,9 @@ import Data.List (intercalate)
 import Network.HTTP.Simple
 import qualified Data.ByteString.Lazy.Char8 as S8
 
-listBooksS3 :: String -> IO [String]
-listBooksS3 rootURL = do
-    request <- parseRequest (rootURL ++ "/index.txt")
+listBooksS3 :: String -> String -> IO [String]
+listBooksS3 rootURL dir = do
+    request <- parseRequest (bookUrlS3 rootURL dir "index.txt")
     response <- httpLBS request
     let body = getResponseBody response
     return . lines . S8.unpack $ body

@@ -13,5 +13,7 @@ allHighlights :: Source -> String -> IO [Highlight]
 allHighlights src href = do
   bs <- byteStringFrom src href
   let e = decodeEither' bs
-  let (Right bk) = e -- lol this sucks
+  let bk = case e of
+               (Right b) -> b
+               (Left _) -> undefined
   return $ HL (title bk) (author bk) `map` quotes bk

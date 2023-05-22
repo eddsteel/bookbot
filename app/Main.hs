@@ -4,7 +4,7 @@ import BookBot
 
 main :: IO ()
 main = do
-  ((Config source target), rng) <- initBB
-  highlight <- pickHighlight source rng
-  _ <- postHighlight target highlight
+  ((Config src trg), rng) <- initBB
+  highlight <- pickHighlight src rng
+  _ <- postHighlight trg highlight
   return ()

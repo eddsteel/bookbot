@@ -2,14 +2,18 @@ module BookBot.Book(pickHighlight) where
 
 import System.Random
 import BookBot.Data
+import BookBot.Local
+import BookBot.S3
+import BookBot.Util
+import BookBot.YAML
 
 listBooks :: Source -> IO [String]
-listBooks (S3 _ url _) = listBooksS3 url
-listBooks (Local dir) = listBooksLocal dir
+listBooks (S3 _ u d) = listBooksS3 u d
+listBooks (Local d) = listBooksLocal d
 
 bookUrl :: Source -> String -> String
-bookUrl (S3 _ url dir) bk = bookUrlS3 url dir bk
-bookUrl (Local dir) bk = bookUrlLocal dir bk
+bookUrl (S3 _ u d) bk = bookUrlS3 u d bk
+bookUrl (Local d) bk = bookUrlLocal d bk
 
 randomHighlight :: RandomGen g => Source -> String -> g -> IO Highlight
 randomHighlight src href rng = do
@@ -22,5 +26,5 @@ pickHighlight src rng = do
   listing <- listBooks src
   let books = weighted listing
   let bk = randomElement rng books
-  let url = bookUrl src bk
-  fmap clean $ randomHighlight src url rng
+  let u = bookUrl src bk
+  fmap clean $ randomHighlight src u rng

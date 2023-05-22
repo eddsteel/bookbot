@@ -1,4 +1,4 @@
-module BookBot.IO(bookUrlLocal, listBooksLocal) where
+module BookBot.Local(bookUrlLocal, listBooksLocal) where
 import System.Directory ()
 import System.FilePath
 

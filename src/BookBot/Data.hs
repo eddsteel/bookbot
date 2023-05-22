@@ -15,8 +15,10 @@ data Source = S3 { bucket :: String, url :: String, bookDir :: String } | Local 
 data TwitterCredentials = TC { twConsKey :: String, twConsSecret :: String,
                         twAccsToken :: String, twAccsSecret :: String } deriving (Show, Eq)
 data ActivityPubCredentials = AC { apToken :: String, apID :: String, apSecret :: String } deriving (Show, Eq)
+data BlueSkyCredentials = BC { bsIdentifier :: String, bsAppToken :: String } deriving (Show, Eq)
 data Target = Twitter TwitterCredentials
             | ActivityPub ActivityPubCredentials
+            | BlueSky BlueSkyCredentials
             | Console
             deriving (Show, Eq)
 
@@ -59,7 +61,9 @@ data EnvConfig = EnvConfig {
               s3Url :: Maybe String,
               aPubAccessToken :: Maybe String,
               aPubClientID :: Maybe String,
-              aPubClientSecret :: Maybe String
+              aPubClientSecret :: Maybe String,
+              bSkyIdentifier :: Maybe String,
+              bSkyAppToken :: Maybe String
 }
 
 data Config = Config {
@@ -78,11 +82,12 @@ configSource c = case sequence [s3Bucket c, s3Url c] of
 configTarget :: EnvConfig -> Target
 configTarget c = case sequence [aPubAccessToken c, aPubClientID c, aPubClientSecret c] of
     Just [tok, cid, sec] -> ActivityPub (AC tok cid sec)
-    _ -> case sequence [
-      twitterConsumerKey c, twitterConsumerSecret c,
-      twitterAccessToken c, twitterAccessSecret c] of
-      Just [cKey, cSec, aTok, aSec ] -> Twitter (TC cKey cSec aTok aSec)
-      _ -> Console
+    _ -> case sequence [ bSkyIdentifier c, bSkyAppToken c ] of
+        Just [bid, atk] -> BlueSky (BC bid atk)
+        _ -> case sequence [twitterConsumerKey c, twitterConsumerSecret c,
+                            twitterAccessToken c, twitterAccessSecret c] of
+            Just [cKey, cSec, aTok, aSec ] -> Twitter (TC cKey cSec aTok aSec)
+            _ -> Console
 
 wc :: Highlight -> Int
 wc = length . hlRender
@@ -98,4 +103,6 @@ createConfig get getM = EnvConfig <$>
   getM "S3_URL" <*>
   getM "APUB_ACCESS_TOKEN" <*>
   getM "APUB_CLIENT_ID" <*>
-  getM "APUB_CLIENT_SECRET"
+  getM "APUB_CLIENT_SECRET" <*>
+  getM "BSKY_IDENTIFIER" <*>
+  getM "BSKY_APP_TOKEN"
