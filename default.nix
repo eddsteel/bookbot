@@ -8,6 +8,8 @@ let
         hardeningDisable = ["all"];
       });
       bookbot = (hself.callPackage ./bookbot.nix {}).overrideAttrs (attrs: {
+        enableExecutableProfiling = true;
+        enableLibraryProfiling = true;
         fixupPhase = ''
           mkdir $out/fonts
           cp -r fonts/* $out/fonts

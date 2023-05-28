@@ -22,12 +22,14 @@ dependencies:
 - directory
 - filepath
 - http-conduit
+- http-types
 - random
 - regex-compat
 - split
 - svg-builder
 - svgcairo
 - text
+- time
 - twitter-conduit
 - twitter-types
 - yaml

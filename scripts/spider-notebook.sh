@@ -11,6 +11,10 @@ set -ex
 mkdir -p $BOOK_DIRECTORY
 mkdir -p tmp
 
+get-isbn() {
+    grep "$1" manual/ids.csv | cut -f 2 -d,
+}
+
 download-books() {
     curl 'https://read.amazon.co.uk/notebook' -s \
          -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:94.0) Gecko/20100101 Firefox/94.0' \
@@ -46,12 +50,16 @@ download-books() {
 }
 
 convert-books() {
+    local isbn
     grep -Eo 'asin&quot;:&quot;.{10}&quot;' tmp/notebook | cut -c18-27 | while read asin; do
+        isbn=$(get-isbn "$asin")
         xmllint --encode 'utf-8' --html --xmlout --output "tmp/$asin.xml" "tmp/$asin" && \
         pup -p --charset utf-8 '#highlight text{}' < tmp/$asin.xml | jq -scR \
+            --arg asin "$asin" --arg isbn "$isbn" \
             --arg author "$(pup -p --charset utf-8 'div.kp-notebook-annotation-container p.a-spacing-top-micro text{}' < tmp/$asin.xml)" \
             --arg title "$(pup -p --charset utf-8 'div.kp-notebook-annotation-container h3.kp-notebook-selectable text{}' < tmp/$asin.xml)" \
-            '{"author": $author, "title": $title, "quotes": split("\n")}' | json2yaml | sed "/- ''/d" \
+            '{"author": $author, "title": $title, "isbn": $isbn, "asin": $asin, "quotes": split("\n")}' | \
+            json2yaml | sed "/- ''/d" \
         > $BOOK_DIRECTORY/$asin.yaml
     done
 
@@ -70,6 +78,6 @@ upload-books() {
     fi
 }
 
-download-books
-convert-books
+#download-books
+#convert-books
 upload-books
