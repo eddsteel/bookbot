@@ -31,6 +31,22 @@ data Quotes = Q { title :: String, author :: String, quotes :: [String] }
 
 deriveJSON defaultOptions ''Quotes
 
+
+-- Bluesky IO JSON
+type Identifier = String
+type AppToken = String
+
+data BlueSkyCreateRecord = CR { repo :: String, collection :: String, record :: BlueSkyTextPost } deriving (Show, Eq)
+data BlueSkyTextPost = TP { text :: String, createdAt :: String } deriving (Show, Eq)
+data BlueSkyLoginRequest = LR { identifier :: Identifier, password :: AppToken } deriving (Show, Eq)
+data BlueSkySession = BS { did :: String, accessJwt :: String } deriving (Show, Eq)
+
+deriveJSON defaultOptions ''BlueSkyTextPost
+deriveJSON defaultOptions ''BlueSkyCreateRecord
+deriveJSON defaultOptions ''BlueSkyLoginRequest
+deriveJSON defaultOptions ''BlueSkySession
+
+
 clean :: Highlight -> Highlight
 clean (HL bk athr qt) = HL book' author' quote'
   where book' = subRegex (mkRegex " \\([^)]*\\)$") bk ""

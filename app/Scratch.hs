@@ -10,8 +10,9 @@ import BookBot.YAML
 manual :: IO ()
 manual = do
   ((Config src trg), rng) <- initBB
-  highlight <- pickHighlight src rng
-  _ <- postImg trg highlight "/tmp/foo.png"
+  highlight <- pickHighlight src rng  
+--  _ <- postImg trg highlight "/tmp/foo.png"
+  _ <- postHighlight trg highlight
   return ()
 
 singlepost :: IO ()
@@ -30,6 +31,14 @@ singleimg = do
   _ <- postHighlight trg hl
 -- _ <- postImg trg hl "/tmp/foo.png"
   putStrLn (show hl)
+
+checkS3 :: IO ()
+checkS3 = do
+  ((Config src _), _) <- initBB
+  -- highlight <- pickHighlight src rng
+  highlights <- allHighlights src "https://s3.eddsteel.com/bookbot/books/manual/black-jacobins.yaml"  
+  _ <- postHighlight Console $ highlights !! 1
+  return ()
 
 main :: IO ()
 main = manual
